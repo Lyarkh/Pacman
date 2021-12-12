@@ -11,9 +11,26 @@ preto = (0,0,0)
 class Pacman:
     def __init__(self):
         self.centro_x = 400
-        self.centro_y = 300
+        self.centro_y = 300 
         self.tamanho = 100
+        self.vel_x = 1
+        self.vel_y = 1
         self.raio = self.tamanho/2
+    
+    def calcular_regras(self):
+        self.centro_x += self.vel_x
+        self.centro_y += self.vel_y
+
+        if self.centro_x + self.raio > 800:
+            self.vel_x = -1
+        if self.centro_x - self.raio < 0:
+            self.vel_x = 1
+
+        if self.centro_y + self.raio > 600:
+            self.vel_y = -1
+        if self.centro_y - self.raio < 0:
+            self.vel_y = 1
+
 
     def pintar(self,tela):
         # desenhando corpo pacman
@@ -39,7 +56,9 @@ if __name__ == "__main__":
 
 
 while True:
+    pacman.calcular_regras()
 
+    tela.fill(preto)
     pacman.pintar(tela)
     pygame.display.update()
     
