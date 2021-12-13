@@ -1,4 +1,5 @@
 import pygame
+from .elementojogo import *
 from .variaveis import Variaveis
 
 pygame.init()
@@ -7,7 +8,7 @@ variaveis = Variaveis()
 tela = pygame.display.set_mode((800, 600), 0)
 fonte = pygame.font.SysFont("arial", 24, True, False)   
 
-class Pacman:
+class Pacman(ElementoJogo):
     def __init__(self, tamanho):
         self.coluna = 1
         self.linha = 1

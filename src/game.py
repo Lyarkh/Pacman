@@ -9,7 +9,6 @@ tela = pygame.display.set_mode((800, 600), 0)
 preto = (0, 0, 0)
 size = 600 // 30
 
-
 pacman = Pacman(size)
 cenario = Board(size, pacman)
 
@@ -24,9 +23,7 @@ while True:
     pygame.time.delay(100)
     
     eventos = pygame.event.get()
-    for e in eventos:
-        if e.type == pygame.QUIT:
-            exit()
-
+    
     pacman.processar_eventos(eventos)
+    cenario.processar_eventos(eventos)
 

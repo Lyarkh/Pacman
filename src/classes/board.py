@@ -1,6 +1,6 @@
 import pygame
+from .elementojogo import *
 from .variaveis import Variaveis
-
 
 pygame.font.init()
 
@@ -8,8 +8,7 @@ variaveis = Variaveis()
 tela = pygame.display.set_mode((800, 600), 0)
 fonte = pygame.font.SysFont("arial", 24, True, False)  
 
-
-class Board:
+class Board(ElementoJogo):
     def __init__(self, tamanho, pacman1):
         self.pacman = pacman1
         self.tamanho = tamanho
@@ -80,3 +79,8 @@ class Board:
                 if self.matriz[lin][col] == 1:
                     self.pontos += 1
                     self.matriz[lin][col] = 0
+    
+    def processar_eventos(self, eventos):
+        for e in eventos:
+            if e.type == pygame.QUIT:
+                exit()
