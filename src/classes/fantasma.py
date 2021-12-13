@@ -5,7 +5,7 @@ from .movivel import *
 from .variaveis import *
 
 pygame.init()
-variaveis = Variaveis()
+variaveis = VariaveisGlobais()
 
 tela = pygame.display.set_mode((800, 600), 0)
 

@@ -1,18 +1,19 @@
 import pygame
+from .pacman import *
 from .elementojogo import *
 from .variaveis import *
 
+
 pygame.font.init()
-variaveis = Variaveis()
+variaveis = VariaveisGlobais()
 
 tela = pygame.display.set_mode((800, 600), 0)
 fonte = pygame.font.SysFont("arial", 24, True, False)  
 
 class Board(ElementoJogo):
-    def __init__(self, tamanho, pacman, fantasma):
+    def __init__(self, tamanho, pacman):
         self.pacman = pacman
-        self.fantasma = fantasma
-        self.moviveis = [pacman, fantasma]
+        self.moviveis = []
         self.tamanho = tamanho
         self.pontos = 0
         self.matriz = [
@@ -46,6 +47,9 @@ class Board(ElementoJogo):
             [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
         ]
+
+    def adicionar_movivel(self, obj):
+        self.moviveis.append(obj)
 
     def pintar_pontos(self, tela):
         pontos_x = 30 * self.tamanho
@@ -101,9 +105,13 @@ class Board(ElementoJogo):
 
             if len(direcoes) >= 3:
                 movivel.esquina(direcoes)
-                
+
             if col_no_cenario and linha_no_cenario and cond_matriz_intencao:
                 movivel.aceitar_movimento()
+                if isinstance(movivel, Pacman) and self.matriz[lin][col] == 1:
+                    self.pontos += 1
+                    self.matriz[lin][col] = 0
+
             else:
                 movivel.recusar_movimento(direcoes)
     
