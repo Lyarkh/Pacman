@@ -10,11 +10,12 @@ variaveis = Variaveis()
 tela = pygame.display.set_mode((800, 600), 0)
 
 pacman = Pacman(variaveis.size)
-cenario = Board(variaveis.size, pacman)
 blinky = Fantasma (variaveis.vermelho, variaveis.size)
+cenario = Board(variaveis.size, pacman, blinky)
 
 while True:
     pacman.calcular_regras()
+    blinky.calcular_regras()
     cenario.calcular_regras()
 
     tela.fill(variaveis.preto)

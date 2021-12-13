@@ -2,7 +2,7 @@ from abc import ABCMeta, abstractmethod
 
 
 class ElementoJogo(metaclass= ABCMeta):
-
+    
     @abstractmethod
     def calcular_regras(self):
         pass

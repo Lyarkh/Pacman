@@ -8,3 +8,7 @@ class Variaveis:
         self.vermelho = (255, 0, 0)
         self.size = 600 // 30
         self.velocidade = 1
+        self.a_cima = 1
+        self.a_baixo = 2
+        self.a_direita = 3
+        self.a_esquerda = 4

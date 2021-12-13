@@ -1,3 +1,4 @@
+import random
 import pygame
 from .elementojogo import *
 from .variaveis import Variaveis
@@ -10,12 +11,38 @@ tela = pygame.display.set_mode((800, 600), 0)
 class Fantasma(ElementoJogo):
     def __init__(self, cor, tamanho):
         self.coluna = 6.0
-        self.linha = 8.0
+        self.linha = 2.0
+        self.linha_intencao = self.linha
+        self.coluna_intencao = self.coluna
+        self.velocidade = 1
+        self.direcao = variaveis.a_baixo
         self.tamanho = tamanho
         self.cor = cor
 
     def calcular_regras(self):
-        pass
+        if self.direcao == variaveis.a_cima:
+            self.linha_intencao -= self.velocidade
+        elif self.direcao == variaveis.a_baixo:
+            self.linha_intencao += self.velocidade
+        elif self.direcao == variaveis.a_esquerda:
+            self.coluna_intencao -= self.velocidade
+        elif self.direcao == variaveis.a_direita:
+            self.coluna_intencao += self.velocidade
+    
+    def mudar_direcoes(self, direcoes):
+        self.direcao = random.choice(direcoes)
+
+    def esquina(self, direcoes):
+        self.mudar_direcoes(direcoes)
+
+    def aceitar_movimento(self):
+        self.linha = self.linha_intencao
+        self.coluna = self.coluna_intencao
+    
+    def recusar_movimento(self, direcoes):
+        self.linha_intencao = self.linha
+        self.coluna_intencao = self.coluna
+        self.mudar_direcoes(direcoes)
 
     def pintar(self, tela):
         fatia = self.tamanho // 8
@@ -46,7 +73,6 @@ class Fantasma(ElementoJogo):
 
         pygame.draw.circle(tela, variaveis.branco, (olho_d_x, olho_d_y), olho_raio_ext, 0)
         pygame.draw.circle(tela, variaveis.preto, (olho_d_x, olho_d_y), olho_raio_int, 0)
-
 
     def processar_eventos(self, eventos):
         pass

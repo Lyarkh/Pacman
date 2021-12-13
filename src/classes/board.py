@@ -9,8 +9,9 @@ tela = pygame.display.set_mode((800, 600), 0)
 fonte = pygame.font.SysFont("arial", 24, True, False)  
 
 class Board(ElementoJogo):
-    def __init__(self, tamanho, pacman1):
-        self.pacman = pacman1
+    def __init__(self, tamanho, pacman, fantasma):
+        self.pacman = pacman
+        self.fantasma = fantasma
         self.tamanho = tamanho
         self.pontos = 0
         self.matriz = [
@@ -68,8 +69,27 @@ class Board(ElementoJogo):
         for numero_linha, linha in enumerate(self.matriz):
             self.pintar_linha(numero_linha, linha)
         self.pintar_pontos(tela)
-    
+
+    def get_direcoes(self, linha, coluna):
+        direcoes = []
+
+        if self.matriz[int(linha - 1)][int(coluna)] != 2:
+            direcoes.append(variaveis.a_cima)
+        if self.matriz[int(linha + 1)][int(coluna)] != 2:
+            direcoes.append(variaveis.a_baixo)
+        if self.matriz[int(linha)][int(coluna - 1)] != 2:
+            direcoes.append(variaveis.a_esquerda)
+        if self.matriz[int(linha)][int(coluna + 1)] != 2:
+            direcoes.append(variaveis.a_direita)
+
+        return direcoes
+
     def calcular_regras(self):
+        direcoes = self.get_direcoes(self.fantasma.linha, self.fantasma.coluna)
+        if len(direcoes) >= 3:
+            self.fantasma.esquina(direcoes)
+            
+        #print("direções", direcoes)
         col = self.pacman.coluna_intencao
         lin = self.pacman.linha_intencao
 
@@ -79,6 +99,13 @@ class Board(ElementoJogo):
                 if self.matriz[lin][col] == 1:
                     self.pontos += 1
                     self.matriz[lin][col] = 0
+        
+        col = int(self.fantasma.coluna_intencao)
+        lin = int(self.fantasma.linha_intencao)
+        if 0 <= col < 28 and 0 <= lin < 29 and self.matriz[lin][col] != 2:
+            self.fantasma.aceitar_movimento()
+        else:
+            self.fantasma.recusar_movimento(direcoes)
     
     def processar_eventos(self, eventos):
         for e in eventos:
