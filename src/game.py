@@ -1,6 +1,6 @@
 import pygame
-from classes.board import Board
-from classes.pacman import Pacman
+from classes.board import *
+from classes.pacman import *
 from classes.fantasma import *
 from classes.variaveis import *
 

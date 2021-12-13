@@ -1,6 +1,7 @@
 import pygame
 from .elementojogo import *
-from .variaveis import Variaveis
+from .movivel import *
+from .variaveis import *
 
 pygame.init()
 variaveis = Variaveis()
@@ -8,7 +9,7 @@ variaveis = Variaveis()
 tela = pygame.display.set_mode((800, 600), 0)
 fonte = pygame.font.SysFont("arial", 24, True, False)   
 
-class Pacman(ElementoJogo):
+class Pacman(ElementoJogo, Movivel):
     def __init__(self, tamanho):
         self.coluna = 1
         self.linha = 1
@@ -67,3 +68,10 @@ class Pacman(ElementoJogo):
     def aceitar_movimento(self):
         self.linha = self.linha_intencao
         self.coluna = self.coluna_intencao
+
+    def recusar_movimento(self, direcoes):
+        self.linha_intencao = self.linha
+        self.coluna_intencao = self.coluna
+
+    def esquina(self, direcoes):
+        pass

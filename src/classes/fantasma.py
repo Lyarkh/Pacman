@@ -1,14 +1,15 @@
 import random
 import pygame
 from .elementojogo import *
-from .variaveis import Variaveis
+from .movivel import *
+from .variaveis import *
 
 pygame.init()
-
 variaveis = Variaveis()
+
 tela = pygame.display.set_mode((800, 600), 0)
 
-class Fantasma(ElementoJogo):
+class Fantasma(ElementoJogo, Movivel):
     def __init__(self, cor, tamanho):
         self.coluna = 6.0
         self.linha = 2.0

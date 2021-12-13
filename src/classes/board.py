@@ -1,10 +1,10 @@
 import pygame
 from .elementojogo import *
-from .variaveis import Variaveis
+from .variaveis import *
 
 pygame.font.init()
-
 variaveis = Variaveis()
+
 tela = pygame.display.set_mode((800, 600), 0)
 fonte = pygame.font.SysFont("arial", 24, True, False)  
 
@@ -12,6 +12,7 @@ class Board(ElementoJogo):
     def __init__(self, tamanho, pacman, fantasma):
         self.pacman = pacman
         self.fantasma = fantasma
+        self.moviveis = [pacman, fantasma]
         self.tamanho = tamanho
         self.pontos = 0
         self.matriz = [
@@ -85,27 +86,26 @@ class Board(ElementoJogo):
         return direcoes
 
     def calcular_regras(self):
-        direcoes = self.get_direcoes(self.fantasma.linha, self.fantasma.coluna)
-        if len(direcoes) >= 3:
-            self.fantasma.esquina(direcoes)
-            
-        #print("direções", direcoes)
-        col = self.pacman.coluna_intencao
-        lin = self.pacman.linha_intencao
+        for movivel in self.moviveis:
+            lin = int(movivel.linha)
+            col = int(movivel.coluna)
 
-        if 0 <= col < 28 and 0 <= lin < 29:
-            if self.matriz[lin][col] != 2:
-                self.pacman.aceitar_movimento()
-                if self.matriz[lin][col] == 1:
-                    self.pontos += 1
-                    self.matriz[lin][col] = 0
-        
-        col = int(self.fantasma.coluna_intencao)
-        lin = int(self.fantasma.linha_intencao)
-        if 0 <= col < 28 and 0 <= lin < 29 and self.matriz[lin][col] != 2:
-            self.fantasma.aceitar_movimento()
-        else:
-            self.fantasma.recusar_movimento(direcoes)
+            lin_intencao = int(movivel.linha_intencao)
+            col_intencao = int(movivel.coluna_intencao)
+
+            direcoes = self.get_direcoes(lin, col)
+
+            col_no_cenario = 0 <= col_intencao < 28
+            linha_no_cenario = 0 <= lin_intencao < 29
+            cond_matriz_intencao = self.matriz[lin_intencao][col_intencao] != 2
+
+            if len(direcoes) >= 3:
+                movivel.esquina(direcoes)
+                
+            if col_no_cenario and linha_no_cenario and cond_matriz_intencao:
+                movivel.aceitar_movimento()
+            else:
+                movivel.recusar_movimento(direcoes)
     
     def processar_eventos(self, eventos):
         for e in eventos:
