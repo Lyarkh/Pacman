@@ -20,6 +20,7 @@ class Fantasma(ElementoJogo, Movivel):
         self.tamanho = tamanho
         self.cor = cor
 
+    #Fazendo com que o fantasma se movimente por conta própria
     def calcular_regras(self):
         if self.direcao == variaveis.a_cima:
             self.linha_intencao -= self.velocidade
@@ -45,6 +46,7 @@ class Fantasma(ElementoJogo, Movivel):
         self.coluna_intencao = self.coluna
         self.mudar_direcoes(direcoes)
 
+    #Desenhando o fantasma na tela
     def pintar(self, tela):
         fatia = self.tamanho // 8
         px = int(self.coluna * self.tamanho)

@@ -1,3 +1,4 @@
+#Classe com todas as variáves que são utilizados em todas as outras classes
 
 class VariaveisGlobais:
     def __init__(self):

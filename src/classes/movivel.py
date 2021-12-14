@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
+#Classe abstrata para as classes que tem movimentação (Pacman e Fantasma)
 class Movivel(metaclass= ABCMeta):
     
     @abstractmethod

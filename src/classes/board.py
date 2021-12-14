@@ -4,7 +4,7 @@ from .fantasma import *
 from .elementojogo import *
 from .variaveis import *
 
-
+#inicializando variáveis 
 pygame.font.init()
 variaveis = VariaveisGlobais()
 
@@ -55,6 +55,7 @@ class Board(ElementoJogo):
     def adicionar_movivel(self, obj):
         self.moviveis.append(obj)
 
+    #Pintando score contendo vidas e pontos do jogo
     def pintar_score(self, tela):
         pontos_x = 30 * self.tamanho
         img_pontos = fonte.render(f"Score: {self.pontos} ", True, variaveis.amarelo)
@@ -63,6 +64,7 @@ class Board(ElementoJogo):
         tela.blit(img_pontos,(pontos_x, 50))
         tela.blit(img_vidas,(pontos_x, 100))
 
+    #Pintando o cenário e as pilulas do pacman na tela
     def pintar_linha(self, numero_linha, linha):
         for numero_coluna, coluna in enumerate(linha):
             x = numero_coluna * self.tamanho
@@ -124,7 +126,7 @@ class Board(ElementoJogo):
             direcoes.append(variaveis.a_direita)
 
         return direcoes
-
+    
     def calcular_regras(self):
         if self.estado == "Jogando":
             self.calcular_regras_jogando()
@@ -165,7 +167,7 @@ class Board(ElementoJogo):
                 else:
                     self.pacman.linha = 1
                     self.pacman.coluna = 1
-                    
+
             else:
 
                 if 0 <= col_intencao < 28  and 0 <= lin_intencao < 29 and\
