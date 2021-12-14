@@ -25,6 +25,7 @@ cenario.adicionar_movivel(clyde)
 cenario.adicionar_movivel(pinky)
 
 while True:
+    
     pacman.calcular_regras()
 
     blinky.calcular_regras()

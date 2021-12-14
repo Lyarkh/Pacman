@@ -29,7 +29,7 @@ class Pacman(ElementoJogo, Movivel):
         self.centro_y = int(self.linha  * self.tamanho + self.raio)
 
     def pintar(self,tela):
-        # desenhando corpo pacman
+        #Desenhando corpo pacman
         pygame.draw.circle(tela, variaveis.amarelo, (self.centro_x, self.centro_y), self.raio, 0)
 
         #Desenho boca pacman

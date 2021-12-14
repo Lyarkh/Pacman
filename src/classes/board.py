@@ -9,7 +9,8 @@ pygame.font.init()
 variaveis = VariaveisGlobais()
 
 tela = pygame.display.set_mode((800, 600), 0)
-fonte = pygame.font.SysFont("arial", 24, True, False)  
+fonte = pygame.font.SysFont("arial", 24, True, False) 
+fonte_estados = pygame.font.SysFont("arial", 48, True, False) 
 
 class Board(ElementoJogo):
     def __init__(self, tamanho, pacman):
@@ -81,12 +82,19 @@ class Board(ElementoJogo):
         elif self.estado == "GameOver":
             self.pintar_jogando(tela)
             self.pintar_gameover(tela)
+        elif self.estado == "Vitoria":
+            self.pintar_jogando(tela)
+            self.pintar_vitoria(tela)
+    
 
     def pintar_texto_centro(self, tela, texto):
-        texto_img = fonte.render(texto, True, variaveis.amarelo)
+        texto_img = fonte_estados.render(texto, True, variaveis.amarelo)
         texto_x = (tela.get_width() - texto_img.get_width()) // 2
         texto_y = (tela.get_height() - texto_img.get_height()) // 2
         tela.blit (texto_img, (texto_x, texto_y))
+
+    def pintar_vitoria(self, tela):
+        self.pintar_texto_centro(tela, "P A R A B E N S  V O C E  V E N C E U  ! !")
 
     def pintar_gameover(self, tela):
         self.pintar_texto_centro(tela, "G A M E   O V E R !")
@@ -156,6 +164,9 @@ class Board(ElementoJogo):
                     if isinstance(movivel, Pacman) and self.matriz[lin][col] == 1:
                         self.pontos += 1
                         self.matriz[lin][col] = 0
+
+                        if self.pontos >= 306:
+                            self.estado = "Vitoria"
 
                 else:
                     movivel.recusar_movimento(direcoes)

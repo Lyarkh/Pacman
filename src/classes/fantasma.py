@@ -11,8 +11,8 @@ tela = pygame.display.set_mode((800, 600), 0)
 
 class Fantasma(ElementoJogo, Movivel):
     def __init__(self, cor, tamanho):
-        self.coluna = 6.0
-        self.linha = 2.0
+        self.coluna = 13.0
+        self.linha = 15.0
         self.linha_intencao = self.linha
         self.coluna_intencao = self.coluna
         self.velocidade = 1
