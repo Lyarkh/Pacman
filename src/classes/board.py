@@ -16,6 +16,7 @@ class Board(ElementoJogo):
         self.moviveis = []
         self.tamanho = tamanho
         self.pontos = 0
+        self.estado = "Jogando" #Estados possíveis *Jogando *Pausado *GameOver *Vitória
         self.matriz = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
             [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
@@ -71,6 +72,19 @@ class Board(ElementoJogo):
                 pygame.draw.circle(tela, variaveis.amarelo, (x + half, y + half), self.tamanho // 10, 0)
 
     def pintar(self, tela):
+        if self.estado == "Jogando":
+            self.pintar_jogando(tela)
+        elif self.estado == "Pausado":
+            self.pintar_jogando(tela)
+            self.pintar_pausado(tela)
+
+    def pintar_pausado(self, tela):
+        texto_img = fonte.render("P A U S A D O", True, variaveis.amarelo)
+        texto_x = (tela.get_width() - texto_img.get_width()) // 2
+        texto_y = (tela.get_height() - texto_img.get_height()) // 2
+        tela.blit (texto_img, (texto_x, texto_y))
+
+    def pintar_jogando(self, tela):
         for numero_linha, linha in enumerate(self.matriz):
             self.pintar_linha(numero_linha, linha)
         self.pintar_pontos(tela)
@@ -90,6 +104,15 @@ class Board(ElementoJogo):
         return direcoes
 
     def calcular_regras(self):
+        if self.estado == "Jogando":
+            self.calcular_regras_jogando()
+        elif self.estado == "Pausado":
+            self.calcular_regras_pausado()
+
+    def calcular_regras_pausado(self):
+        pass
+    
+    def calcular_regras_jogando(self):
         for movivel in self.moviveis:
             lin = int(movivel.linha)
             col = int(movivel.coluna)
@@ -99,14 +122,11 @@ class Board(ElementoJogo):
 
             direcoes = self.get_direcoes(lin, col)
 
-            col_no_cenario = 0 <= col_intencao < 28
-            linha_no_cenario = 0 <= lin_intencao < 29
-            cond_matriz_intencao = self.matriz[lin_intencao][col_intencao] != 2
-
             if len(direcoes) >= 3:
                 movivel.esquina(direcoes)
 
-            if col_no_cenario and linha_no_cenario and cond_matriz_intencao:
+            if 0 <= col_intencao < 28  and 0 <= lin_intencao < 29 and\
+                         self.matriz[lin_intencao][col_intencao] != 2:
                 movivel.aceitar_movimento()
                 if isinstance(movivel, Pacman) and self.matriz[lin][col] == 1:
                     self.pontos += 1
@@ -119,3 +139,9 @@ class Board(ElementoJogo):
         for e in eventos:
             if e.type == pygame.QUIT:
                 exit()
+            elif e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_p:
+                    if self.estado == "Jogando":
+                        self.estado = "Pausado"
+                    else:
+                        self.estado = "Jogando"
