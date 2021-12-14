@@ -25,7 +25,7 @@ cenario.adicionar_movivel(clyde)
 cenario.adicionar_movivel(pinky)
 
 while True:
-    
+
     pacman.calcular_regras()
 
     blinky.calcular_regras()
@@ -38,13 +38,14 @@ while True:
     tela.fill(variaveis.preto)
 
     cenario.pintar(tela)
-    pacman.pintar(tela)
 
+    pacman.pintar(tela)
+    
     blinky.pintar(tela)
     inky.pintar(tela)
     clyde.pintar(tela)
     pinky.pintar(tela)
-
+    
     pygame.display.update()
     pygame.time.delay(100)
     

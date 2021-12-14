@@ -9,8 +9,8 @@ pygame.font.init()
 variaveis = VariaveisGlobais()
 
 tela = pygame.display.set_mode((800, 600), 0)
-fonte = pygame.font.SysFont("arial", 24, True, False) 
-fonte_estados = pygame.font.SysFont("arial", 48, True, False) 
+fonte = pygame.font.SysFont("GOUDY STOUT", 18, True, False) 
+fonte_estados = pygame.font.SysFont("GOUDY STOUT", 32, True, False) 
 
 class Board(ElementoJogo):
     def __init__(self, tamanho, pacman):
@@ -18,6 +18,7 @@ class Board(ElementoJogo):
         self.moviveis = []
         self.tamanho = tamanho
         self.pontos = 0
+        self.vidas = 5
         self.estado = "Jogando" #Estados possíveis *Jogando *Pausado *GameOver *Vitória
         self.matriz = [
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -54,10 +55,13 @@ class Board(ElementoJogo):
     def adicionar_movivel(self, obj):
         self.moviveis.append(obj)
 
-    def pintar_pontos(self, tela):
+    def pintar_score(self, tela):
         pontos_x = 30 * self.tamanho
         img_pontos = fonte.render(f"Score: {self.pontos} ", True, variaveis.amarelo)
+        img_vidas = fonte.render(f"Vidas: {self.vidas} ", True, variaveis.amarelo)
+
         tela.blit(img_pontos,(pontos_x, 50))
+        tela.blit(img_vidas,(pontos_x, 100))
 
     def pintar_linha(self, numero_linha, linha):
         for numero_coluna, coluna in enumerate(linha):
@@ -71,7 +75,7 @@ class Board(ElementoJogo):
             pygame.draw.rect(tela, cor, (x, y, self.tamanho, self.tamanho), 0)
 
             if coluna == 1:
-                pygame.draw.circle(tela, variaveis.amarelo, (x + half, y + half), self.tamanho // 10, 0)
+                pygame.draw.circle(tela, variaveis.branco, (x + half, y + half), self.tamanho // 10, 0)
 
     def pintar(self, tela):
         if self.estado == "Jogando":
@@ -94,7 +98,7 @@ class Board(ElementoJogo):
         tela.blit (texto_img, (texto_x, texto_y))
 
     def pintar_vitoria(self, tela):
-        self.pintar_texto_centro(tela, "P A R A B E N S  V O C E  V E N C E U  ! !")
+        self.pintar_texto_centro(tela, "V O C E  V E N C E U  !!")
 
     def pintar_gameover(self, tela):
         self.pintar_texto_centro(tela, "G A M E   O V E R !")
@@ -105,7 +109,7 @@ class Board(ElementoJogo):
     def pintar_jogando(self, tela):
         for numero_linha, linha in enumerate(self.matriz):
             self.pintar_linha(numero_linha, linha)
-        self.pintar_pontos(tela)
+        self.pintar_score(tela)
 
     def get_direcoes(self, linha, coluna):
         direcoes = []
@@ -151,11 +155,17 @@ class Board(ElementoJogo):
             pacman_mesma_linha_fantasma = (movivel.linha == self.pacman.linha)
             pacman_mesma_coluna_fantasma = (movivel.coluna == self.pacman.coluna)
             condicao_gameover = (isinstance(movivel, Fantasma) and \
-                                pacman_mesma_linha_fantasma  and \
-                                pacman_mesma_coluna_fantasma)
+                                  pacman_mesma_linha_fantasma  and \
+                                  pacman_mesma_coluna_fantasma)
 
             if condicao_gameover:
-                self.estado = "GameOver"
+                self.vidas -= 1
+                if self.vidas <= 0:
+                    self.estado = "GameOver"
+                else:
+                    self.pacman.linha = 1
+                    self.pacman.coluna = 1
+                    
             else:
 
                 if 0 <= col_intencao < 28  and 0 <= lin_intencao < 29 and\
