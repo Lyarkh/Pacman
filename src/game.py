@@ -15,6 +15,7 @@ blinky = Fantasma(variaveis.vermelho, variaveis.size)
 inky = Fantasma(variaveis.ciano, variaveis.size)
 clyde = Fantasma(variaveis.laranja, variaveis.size)
 pinky = Fantasma(variaveis.rosa, variaveis.size)
+
 cenario = Board(variaveis.size, pacman)
 
 cenario.adicionar_movivel(pacman)
@@ -29,7 +30,8 @@ while True:
     blinky.calcular_regras()
     inky.calcular_regras()
     clyde.calcular_regras()
-    pinky.calcular_regras()
+    pinky.calcular_regras() 
+
     cenario.calcular_regras()
 
     tela.fill(variaveis.preto)
