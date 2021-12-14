@@ -1,5 +1,6 @@
 import pygame
 from .pacman import *
+from .fantasma import *
 from .elementojogo import *
 from .variaveis import *
 
@@ -77,12 +78,21 @@ class Board(ElementoJogo):
         elif self.estado == "Pausado":
             self.pintar_jogando(tela)
             self.pintar_pausado(tela)
+        elif self.estado == "GameOver":
+            self.pintar_jogando(tela)
+            self.pintar_gameover(tela)
 
-    def pintar_pausado(self, tela):
-        texto_img = fonte.render("P A U S A D O", True, variaveis.amarelo)
+    def pintar_texto_centro(self, tela, texto):
+        texto_img = fonte.render(texto, True, variaveis.amarelo)
         texto_x = (tela.get_width() - texto_img.get_width()) // 2
         texto_y = (tela.get_height() - texto_img.get_height()) // 2
         tela.blit (texto_img, (texto_x, texto_y))
+
+    def pintar_gameover(self, tela):
+        self.pintar_texto_centro(tela, "G A M E   O V E R !")
+
+    def pintar_pausado(self, tela):
+        self.pintar_texto_centro(tela, "P A U S A D O")
 
     def pintar_jogando(self, tela):
         for numero_linha, linha in enumerate(self.matriz):
@@ -108,6 +118,11 @@ class Board(ElementoJogo):
             self.calcular_regras_jogando()
         elif self.estado == "Pausado":
             self.calcular_regras_pausado()
+        elif self.estado == "GameOver":
+            self.calcular_regras_gameover()
+
+    def calcular_regras_gameover(self):
+        pass
 
     def calcular_regras_pausado(self):
         pass
@@ -124,16 +139,26 @@ class Board(ElementoJogo):
 
             if len(direcoes) >= 3:
                 movivel.esquina(direcoes)
+            
+            pacman_mesma_linha_fantasma = (movivel.linha == self.pacman.linha)
+            pacman_mesma_coluna_fantasma = (movivel.coluna == self.pacman.coluna)
+            condicao_gameover = (isinstance(movivel, Fantasma) and \
+                                pacman_mesma_linha_fantasma  and \
+                                pacman_mesma_coluna_fantasma)
 
-            if 0 <= col_intencao < 28  and 0 <= lin_intencao < 29 and\
-                         self.matriz[lin_intencao][col_intencao] != 2:
-                movivel.aceitar_movimento()
-                if isinstance(movivel, Pacman) and self.matriz[lin][col] == 1:
-                    self.pontos += 1
-                    self.matriz[lin][col] = 0
-
+            if condicao_gameover:
+                self.estado = "GameOver"
             else:
-                movivel.recusar_movimento(direcoes)
+
+                if 0 <= col_intencao < 28  and 0 <= lin_intencao < 29 and\
+                            self.matriz[lin_intencao][col_intencao] != 2:
+                    movivel.aceitar_movimento()
+                    if isinstance(movivel, Pacman) and self.matriz[lin][col] == 1:
+                        self.pontos += 1
+                        self.matriz[lin][col] = 0
+
+                else:
+                    movivel.recusar_movimento(direcoes)
     
     def processar_eventos(self, eventos):
         for e in eventos:
