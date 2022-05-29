@@ -2,6 +2,7 @@ import pygame
 from .pacman import *
 from .fantasma import *
 from .elementojogo import *
+import sys
 from .variaveis import *
 
 #inicializando variáveis 
@@ -186,7 +187,7 @@ class Board(ElementoJogo):
     def processar_eventos(self, eventos):
         for e in eventos:
             if e.type == pygame.QUIT:
-                exit()
+                sys.exit()
             elif e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_p:
                     if self.estado == "Jogando":
