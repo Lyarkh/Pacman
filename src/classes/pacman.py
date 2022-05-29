@@ -68,9 +68,9 @@ class Pacman(ElementoJogo, Movivel):
                     self.vel_y = variaveis.velocidade
             
             elif e.type == pygame.KEYUP:
-                if e.key == pygame.K_RIGHT or e.key == pygame.K_LEFT:
+                if e.key in (pygame.K_RIGHT, pygame.K_LEFT):
                     self.vel_x = 0
-                elif e.key == pygame.K_UP or e.key == pygame.K_DOWN:
+                elif e.key in (pygame.K_UP, pygame.K_DOWN):
                     self.vel_y = 0
     
     def aceitar_movimento(self):
